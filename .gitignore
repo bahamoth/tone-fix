@@ -1,0 +1,5 @@
+.DS_Store
+
+# Global gitignore excludes .claude*; plugin.json must be tracked
+!.claude-plugin/
+!.claude-plugin/**
