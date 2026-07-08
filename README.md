@@ -1,6 +1,6 @@
 # tone-fix
 
-한국어 문서·인포그래픽·강의자료·슬라이드 덱의 AI 말투·번역체를 제거하고 명사구 제목·사실 기반 어조로 교정하는 스킬. [Agent Skills](https://agentskills.io) 표준을 따르는 `SKILL.md` 패키지이며, Claude Code 플러그인으로도 그대로 동작한다.
+한국어 문서·인포그래픽·강의자료·슬라이드 덱의 AI 말투와 번역체를 걷어내고 명사구 제목·사실 기반 어조로 교정하는 스킬. [Agent Skills](https://agentskills.io) 표준을 따르는 `SKILL.md` 패키지이며, Claude Code 플러그인으로도 동작한다.
 
 ## Installation
 
@@ -17,12 +17,12 @@ claude plugin install tone-fix
 claude plugin add bahamoth/tone-fix
 ```
 
-### Agent Skill로 (Claude Code 외 에이전트)
+### Agent Skill 로 (다른 에이전트)
 
-이 레포 자체가 하나의 스킬 패키지다(`SKILL.md`가 루트에 위치). Agent Skills 표준을 지원하는 도구라면 이 레포를 클론해 해당 에이전트의 스킬 디렉토리에 배치하면 된다.
+에이전트의 스킬 디렉토리에 클론한다. 경로는 도구마다 다르다 — Codex CLI 는 `~/.agents/skills/`(개인) · `.agents/skills/`(프로젝트).
 
 ```bash
-git clone https://github.com/bahamoth/tone-fix ~/.claude/skills/tone-fix
+git clone https://github.com/bahamoth/tone-fix ~/.agents/skills/tone-fix
 ```
 
 ## Usage
@@ -45,7 +45,3 @@ git clone https://github.com/bahamoth/tone-fix ~/.claude/skills/tone-fix
 - 비전문가·구어체 어휘를 실무 전문가 어휘로 교정
 - 한글 어절 단위 줄바꿈 규칙
 - 마무리용 일괄 점검 grep 블록 제공 ([`references/tone-rules.md`](references/tone-rules.md))
-
-## Configuration
-
-별도 설정 불필요. 규칙은 [`references/tone-rules.md`](references/tone-rules.md) 에 내장되어 있다.
