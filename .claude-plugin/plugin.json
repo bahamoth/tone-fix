@@ -5,7 +5,7 @@
   "author": {
     "name": "bahamoth"
   },
-  "homepage": "https://github.com/bahamoth/claude-tone-fix",
+  "homepage": "https://github.com/bahamoth/tone-fix",
   "license": "MIT",
   "keywords": [
     "korean",
@@ -13,9 +13,7 @@
     "writing",
     "editing",
     "documentation",
-    "proofreading"
-  ],
-  "skills": [
-    "./skills/tone-fix"
+    "proofreading",
+    "agent-skill"
   ]
 }
