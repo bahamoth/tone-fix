@@ -1,6 +1,6 @@
 {
   "name": "tone-fix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "한국어 문서·인포그래픽·강의자료·슬라이드 덱의 AI 말투·번역체를 제거하고 명사구 제목·사실 기반 어조로 교정",
   "author": {
     "name": "bahamoth"
