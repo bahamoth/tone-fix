@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/bahamoth/tone-fix/compare/v1.0.1...v1.0.2) (2026-09-01)
+
+
+### Documentation
+
+* add 8.8–8.9 tone rules; update grep checks ([1b6a999](https://github.com/bahamoth/tone-fix/commit/1b6a9995b71ee1974458526d19a865e1a7c2f639))
+
 ## [1.0.1](https://github.com/bahamoth/tone-fix/compare/v1.0.0...v1.0.1) (2026-08-07)
 
 
