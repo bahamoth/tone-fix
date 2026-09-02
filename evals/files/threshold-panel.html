@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>L1 임계 패널</title>
+<style>html{word-break:keep-all;overflow-wrap:break-word}.card{width:320px;border:1px solid #ccc;padding:12px}dl dt{font-weight:700;margin-top:8px}</style>
+</head><body>
+<section class="card">
+  <h3>L1 임계 규칙</h3>
+  <p>모든 지표는 7일 이동평균을 기준선으로 사용. 기준선은 매일 00:10 에 갱신.</p>
+  <dl>
+    <dt>기본 임계</dt>
+    <dd>7일 이동평균 대비 하락폭이 θ 를 넘으면 트리거. 기본 θ 15%</dd>
+    <dt>쿨다운</dt>
+    <dd>같은 지표는 쿨다운 동안 재트리거하지 않음. 쿨다운 24시간</dd>
+    <dt>결측</dt>
+    <dd>지표 결측 시 직전 값으로 대체. 최대 2일</dd>
+    <dt>주말</dt>
+    <dd>주말은 별도 기준선 사용. 토·일 θ 20%</dd>
+    <dt>승격</dt>
+    <dd>임계 초과가 2회 연속이면 L2 로 승격. 승격 후 L1 은 재트리거하지 않음.</dd>
+  </dl>
+</section>
+</body></html>

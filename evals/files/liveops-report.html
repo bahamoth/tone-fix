@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>라이브옵스 L1 알림 주간 리포트</title>
+<style>html{word-break:keep-all;overflow-wrap:break-word}.card{width:320px;border:1px solid #ccc;padding:12px;margin:8px;display:inline-block;vertical-align:top}dl dt{font-weight:700}small{display:block;width:320px;color:#666}</style>
+</head><body>
+<h1>L1 알림 주간 리포트 — 8월 4주차</h1>
+<section class="card">
+  <h3>판정 요약</h3>
+  <p>이상 구간 5건이 전부 산식에서 발화됨. 정상 구간 오탐은 2건으로 기준치 3건 이내.</p>
+  <p>저희 팀이 확인한 결과 오탐 2건은 모두 주말 구간. 평일 오탐은 0건.</p>
+</section>
+<section class="card">
+  <h3>임계 규칙</h3>
+  <dl>
+    <dt>기본 임계</dt>
+    <dd>7일 이동평균 대비 하락폭이 θ 를 넘으면 트리거. 기본 θ 15%</dd>
+    <dt>재시도</dt>
+    <dd>수집 지연 시 10분 간격으로 재시도. 최대 3회</dd>
+    <dt>재트리거</dt>
+    <dd>동일 지표는 24시간 내 재트리거하지 않음.<br>중단 지속 감시는 L2 담당.</dd>
+  </dl>
+</section>
+<section class="card">
+  <h3>지표별 현황</h3>
+  <p>DAU 는 4/12 급락 1건이 발화. 원인은 스토어 배포 지연으로 확인.</p>
+  <p>결제 전환은 임계 12% 로 하향 조정. 하향 후 오탐 0건.</p>
+  <p>세션 길이는 변동 없음.</p>
+</section>
+<section class="card">
+  <h3>남은 과제</h3>
+  <ul>
+    <li>임계 캘리브레이션 2건(DAU·결제 전환).</li>
+    <li>주말 계절성 보정 검토. 토·일 오탐 3건이 모두 같은 지표.</li>
+    <li>남은 것은 산식이 아니라 임계 캘리브레이션. 산식 자체는 변경 없음.</li>
+  </ul>
+  <small>기준일 8/29 수집분. 9/1 이후 수집분은 다음 주 리포트에 반영.</small>
+</section>
+<div id="cases"></div>
+<script>
+const cases = [
+  {title: 'DAU 급락', desc: '4/12 트리거. 스토어 배포 지연이 원인으로 확인됨.'},
+  {title: '결제 전환', desc: '임계 하향. 12%'},
+  {title: '세션 길이', desc: '8월 내내 트리거 없음.<br>임계 변경 없음.'},
+  {title: '주말 오탐', desc: '토·일 오탐 3건 발생. 전부 결제 전환 지표.'},
+];
+document.getElementById('cases').innerHTML = cases.map(c =>
+  `<section class="card"><h3>${c.title}</h3><p>${c.desc}</p></section>`).join('');
+</script>
+</body></html>
