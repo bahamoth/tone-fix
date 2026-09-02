@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bahamoth/tone-fix/compare/v1.0.2...v1.1.0) (2026-09-02)
+
+
+### Features
+
+* add §9.1 structural detector and orphan-fragment exception ([7d37de1](https://github.com/bahamoth/tone-fix/commit/7d37de1a3201e0d9c5b0b9997cdf0bcfc7ba1547))
+
 ## [1.0.2](https://github.com/bahamoth/tone-fix/compare/v1.0.1...v1.0.2) (2026-09-01)
 
 
