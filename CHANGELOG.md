@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/bahamoth/tone-fix/compare/v1.1.0...v1.2.0) (2026-09-09)
+
+
+### Features
+
+* 3-stage tone-fix pipeline with check scripts; add §8.10–8.15, §10–11 rules and MD report eval ([d0c778e](https://github.com/bahamoth/tone-fix/commit/d0c778ef761947337a66cd1aa2738cbaaa3054a7))
+
+
+### Documentation
+
+* update README with new sections, usage, and SKILL.md links ([47e0a4d](https://github.com/bahamoth/tone-fix/commit/47e0a4d1a434ce8620c8bae3fdf27e79fb8af465))
+
 ## [1.1.0](https://github.com/bahamoth/tone-fix/compare/v1.0.2...v1.1.0) (2026-09-02)
 
 
