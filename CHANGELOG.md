@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bahamoth/tone-fix/compare/v1.2.0...v1.3.0) (2026-09-15)
+
+
+### Features
+
+* add §8.16 loanword literal-translation rule and §10.5 list-intro count sentence detector ([49452ca](https://github.com/bahamoth/tone-fix/commit/49452cad4cd9a5356b31dcc3e06cf693cc585cd2))
+
 ## [1.2.0](https://github.com/bahamoth/tone-fix/compare/v1.1.0...v1.2.0) (2026-09-09)
 
 
