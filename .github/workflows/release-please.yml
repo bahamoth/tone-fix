@@ -28,5 +28,8 @@ jobs:
         if: steps.rp.outputs.prs_created == 'true'
         env:
           GH_TOKEN: ${{ secrets.TONE_FIX_CI }}
-          PR_NUMBER: ${{ fromJSON(steps.rp.outputs.pr).number }}
-        run: gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --rebase --delete-branch
+          PR_JSON: ${{ steps.rp.outputs.pr }}
+        # fromJSON() 을 env 에서 쓰면 PR 이 없는 실행에서 빈 문자열을 파싱하다 템플릿 오류가 나므로 셸에서 jq 로 파싱한다.
+        run: |
+          PR_NUMBER=$(jq -r '.number' <<<"$PR_JSON")
+          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --rebase --delete-branch
