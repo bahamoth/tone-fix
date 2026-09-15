@@ -5,13 +5,14 @@
     python3 scripts/check_md_layout.py <file.md>...
 
 검출 항목
-- §8.12 볼드 리드 프레임: 리드가 접속 부사(따라서·종합하면·즉·결국)로 시작하거나, 서술 포장(문제는 ~는 점이다)·자기지칭 예고(답하는 질문은 N가지다)·개수만 말하기(~는 세 가지다)로 끝남
+- §8.12 볼드 리드 프레임: 리드가 접속 부사(따라서·종합하면·즉·결국)로 시작하거나, 서술 포장(문제는 ~는 점이다)·자기지칭 예고(답하는 질문은 N가지다)·개수만 말하기(~는 세 가지다·~은 셋이다)로 끝남
 - §8.12 두 절 리드: 볼드 리드 안에 연결 어미(-이고·-하고·-며·-지만·-어서·-므로·-면서·-는데)로 이어진 둘째 절이 있음
 - §11.5 리드 뒤 부연: 마침표로 끝나는 볼드 리드와 같은 줄에 부연 텍스트가 이어짐 (`**라벨**:`·`**라벨**(…)` 형식은 제외)
 - §8.12 형태 선택(수동 확인, `advisories:` 로 따로 집계): 리드가 `X 는 Y 이다 / 명사+다` 복사 구조이거나 `~가 명확하다·중요하다·크다` 같은 내용 없는 형용사 판정으로 끝남. 명사구로 바꿔 읽어 더 자연스러우면 명사구로, 내용이 비면 실제 내용으로 다시 쓴다. 유지하면 보고에 사유를 남긴다
 - §10.1 요약 항목: 요약·TL;DR 절의 항목이 볼드 핵심 문장으로 시작하지 않거나, 핵심 문장이 60자를 넘거나, 항목이 3문장·200자를 넘음
 - §10.2 문제제기 절: 요약 절이 있는 보고서형 문서에 개요·배경·문제·동기·현황·목적 계열 제목이 없음 (수동 확인)
 - §10.3 단계 정의: `N단계` 를 쓰면서 그 단계를 정의하는 줄(표 행·목록·볼드 리드)이 없음. "6단계 구조" 같은 개수 표현은 제외
+- §10.5 목록 도입 문장: 목록 바로 앞 문단이 개수 예고(`~은 셋이다`·`~는 세 가지다`·`~은 다음과 같다`)로 끝남. 명사구("노이즈의 세 가지 원인")로 바꾼다
 - §11.1 키프레임: 제목·볼드·표·목록·코드 같은 시선 고정점 없이 본문이 900자 넘게 이어짐
 - §11.2 문단 길이: 문단(목록 항목 포함)이 4문장 이상이거나 260자(공백 제외, 렌더 기준)를 넘음
 - §11.3 볼드 남발: 한 문단에 볼드 구간이 3개 이상
@@ -46,8 +47,10 @@ LEAD_FRAME = [
     ('접속 부사 시작', re.compile(r'^\*\*\s*(따라서|종합하면|즉|결국|그래서|요컨대|정리하면)[,\s]')),
     ('서술 포장', re.compile(r'(는 점이다|다는 것이다|라는 것이다|라는 점이다|기 때문이다|는 데 있다)\.?\s*\*\*$')),
     ('자기지칭 예고', re.compile(r'(답하는|다루는|던지는|묻는) (질문|물음)|다음과 같(다|습니다)\.?\s*\*\*$')),
-    ('개수만 말하기', re.compile(r'(한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[0-9]+)\s*(가지|갈래|항목|종류|종|개|건)(다|이다|입니다)\.?\s*\*\*$')),
+    ('개수만 말하기', re.compile(r'((한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[0-9]+)\s*(가지|갈래|항목|종류|종|개|건)|(은|는|도) (하나|둘|셋|넷|다섯|여섯|일곱|여덟|아홉|열))(다|이다|입니다)\.?\s*\*\*$')),
 ]
+# §10.5 목록 직전 문단이 개수 예고·자기지칭 예고로 끝남
+COUNT_INTRO = re.compile(r'((은|는|도) (하나|둘|셋|넷|다섯|여섯|일곱|여덟|아홉|열)(이다|입니다)|(한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[0-9]+)\s*(가지|갈래|항목|종류|종|개|건|축|층|군|곳|단계)(다|이다|입니다|(가|이) 있다)|다음과 같(다|습니다))[.!:]?\s*$')
 
 
 def strip_inline(t):
@@ -82,13 +85,15 @@ def check(path):
     gap = 0            # 마지막 시선 고정점 이후 누적 본문 글자 수
     gap_start = None
     para, para_start = [], None
+    last_para = None   # 직전에 flush 된 문단 (§10.5 목록 도입 판정용)
 
     def flush():
-        nonlocal viol, adv, para, para_start
+        nonlocal viol, adv, para, para_start, last_para
         if not para:
             return
         text = ' '.join(l.strip() for l in para)
         is_list = bool(LIST.match(para[0]))
+        last_para = (text, para_start, is_list)
         body_text = LIST.sub('', text, count=1) if is_list else text
         ns, nc = n_sent(body_text), n_chars(body_text)
         kind = '항목' if is_list else '문단'
@@ -148,6 +153,7 @@ def check(path):
         line = raw.rstrip()
         if FENCE.match(line):
             flush()
+            last_para = None
             in_fence = not in_fence
             gap, gap_start = 0, None
             continue
@@ -169,6 +175,7 @@ def check(path):
         hm = HEAD.match(line)
         if hm:
             flush()
+            last_para = None
             section = hm.group(2).strip().lstrip('0123456789. ')
             heads.append(section)
             in_summary = bool(SUMMARY_HEAD.match(section))
@@ -179,10 +186,17 @@ def check(path):
             continue
         if TABLE.match(line) or line.lstrip().startswith('>'):
             flush()
+            last_para = None
             gap, gap_start = 0, None
             continue
         if LIST.match(line):
             flush()
+            if last_para and not last_para[2]:
+                intro = re.sub(r'\([^)]*\)', '', last_para[0].replace('**', '')).strip()
+                if COUNT_INTRO.search(intro):
+                    viol += 1
+                    print(f'[§10.5 목록 도입 L{last_para[1]}] 개수 예고 문장으로 목록을 엶 → 명사구("노이즈의 세 가지 원인"): {last_para[0][:100]}')
+            last_para = None
             gap, gap_start = 0, None
             para, para_start = [line], i
             continue
