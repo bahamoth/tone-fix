@@ -13,8 +13,20 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      # PAT(TONE_FIX_CI)를 쓰는 이유: GITHUB_TOKEN 으로 머지한 푸시는 새 워크플로우를
+      # 실행하지 않아 태그와 Release 생성 단계가 돌지 않는다.
+      - id: rp
+        uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TONE_FIX_CI }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # 릴리스 PR 이 만들어지면 바로 rebase 머지한다. 머지 푸시가 이 워크플로우를 다시 실행해 Release 를 만든다.
+      # 릴리스 PR 은 커밋이 하나뿐이라 rebase 머지 결과는 release-please 가 만든 커밋 그대로 main 에 올라간다.
+      - name: Merge release PR
+        if: steps.rp.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TONE_FIX_CI }}
+          PR_NUMBER: ${{ fromJSON(steps.rp.outputs.pr).number }}
+        run: gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --rebase --delete-branch
