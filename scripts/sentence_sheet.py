@@ -280,6 +280,8 @@ def sheet(path):
         st = set(stems(s))
         if len(st) >= 3:
             for aid, ast, atext in anchors:
+                if not ast:                 # 배지 줄, 코드만 든 볼드 리드처럼 내용어가 없는 앵커
+                    continue
                 inter = st & ast
                 ratio = len(inter) / min(len(st), len(ast))
                 if len(inter) >= 3 and ratio >= 0.5:
