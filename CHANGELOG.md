@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/bahamoth/tone-fix/compare/v1.3.0...v1.4.0) (2026-10-16)
+
+
+### Features
+
+* add §12 context reading stage (2c) and independent review for non-pattern AI phrasing ([0d9cd86](https://github.com/bahamoth/tone-fix/commit/0d9cd8635ad9d359b3a7fe08192092dae06aef67))
+
 ## [1.3.0](https://github.com/bahamoth/tone-fix/compare/v1.2.0...v1.3.0) (2026-09-15)
 
 
