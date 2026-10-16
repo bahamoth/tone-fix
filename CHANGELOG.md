@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.1](https://github.com/bahamoth/tone-fix/compare/v1.4.0...v1.4.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* skip anchors without content words in sentence_sheet restatement check ([1120ce5](https://github.com/bahamoth/tone-fix/commit/1120ce53ab990a975911f330ca9e71041d1ccfad))
+
+
+### Documentation
+
+* align README with implementation and apply tone-fix ([64f2103](https://github.com/bahamoth/tone-fix/commit/64f210339f2b2b94a20974e096def2fe0528f093))
+
 ## [1.4.0](https://github.com/bahamoth/tone-fix/compare/v1.3.0...v1.4.0) (2026-10-16)
 
 
