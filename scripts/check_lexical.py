@@ -64,6 +64,8 @@ RULES = [
      r"(%|%p|배|명|건|원)\)?[^.\n]{0,20}(으?로) 갈(린다|렸다|리는|린|립니다)", True),
     ("§12.10", "보고서에 쓰지 않는 구어 (머릿속 → 기준으로 삼은, 출렁임 → 변동, 따라왔다 → 근접했다)",
      r"머릿속|출렁|따라왔|따라온다", True),
+    ("§8.17", "비유 '축' (두 축, 세 축으로, 한 축, 주축, 속도 축과 비용 축 → 근거, 기준, 원칙 같은 실제 이름을 쓰거나 항목을 바로 나열. 그래프 x축, 가로축, 회전축은 제외)",
+     r"(?:(?<=[\s0-9(\[|\"'“‘/])|^|(?<=주)|(?<=양)|(?<=중심)|(?<=핵심)|(?<=비교)|(?<=평가)|(?<=분석)|(?<=성장)|(?<=전략)|(?<=판단)|(?<=행동))축(?=[은는이가을를과와도의에로별만,.;:)\]|/·\s\"'”’]|으로|입니다|$)", False),
 ]
 HONORIFIC_RULES = [
     ("§6", "평어체 잔존 (존대 문서만)", r"(이다\.|한다\.|된다\.)", False),
@@ -71,6 +73,8 @@ HONORIFIC_RULES = [
 
 
 WEEKDAY = re.compile(r"[월화수목금토일](·[월화수목금토일])+")
+# §8.17 예외: 그래프, 좌표, 기계의 실제 축
+REAL_AXIS = re.compile(r"[xyzXYZ] ?축|(가로|세로|좌표|회전|대칭|수평|수직|보조|지구|자전) ?축|[0-9]+ ?축 ?(센서|가속도|자이로|짐벌|로봇|모터|가공|스테이지)")
 
 
 def scan(path, rules):
@@ -86,17 +90,21 @@ def scan(path, rules):
         lines.append("" if fence else ln)
     for rule, desc, pat, manual in rules:
         rx = re.compile(pat)
-        if rule == "§8.15":
-            found = [(i + 1, ln) for i, ln in enumerate(lines) if rx.search(WEEKDAY.sub("", ln))]
-        else:
-            found = [(i + 1, ln) for i, ln in enumerate(lines) if rx.search(ln)]
+        skip = {"§8.15": WEEKDAY, "§8.17": REAL_AXIS}.get(rule)   # 예외 표기를 지운 뒤 검사
+        found = []
+        for i, ln in enumerate(lines):
+            m = rx.search(skip.sub("", ln) if skip else ln)
+            if m:
+                found.append((i + 1, ln, m))
         if not found:
             continue
         tag = " (수동 확인)" if manual else ""
         print(f"## {rule} {desc}{tag}")
-        for n, ln in found:
-            m = rx.search(ln)
-            print(f"  {path}:{n}: {ln.strip()[:120]}  ← {m.group(0)!r}")
+        for n, ln, m in found:
+            hit = m.group(0)
+            if len(hit) < 3:                        # 한두 글자 매치(축, ·)는 앞뒤 문맥을 함께 보인다
+                hit = m.string[max(0, m.start() - 8):m.end() + 4].strip()
+            print(f"  {path}:{n}: {ln.strip()[:120]}  ← {hit!r}")
         hits += len(found)
     return hits
 

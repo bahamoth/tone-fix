@@ -10,7 +10,7 @@
 
 ## 읽을 것
 
-1. `{SKILL_DIR}/references/tone-rules.md` 의 §12 전체 (판별 질문과 문맥 기제). §8~§8.16, §10 은 ❌ 열만 훑는다.
+1. `{SKILL_DIR}/references/tone-rules.md` 의 §12 전체 (판별 질문과 문맥 기제). §8~§8.17, §10 은 ❌ 열만 훑는다.
 2. `{SKILL_DIR}/references/context-examples.md` (문단 단위 교정 사례)
 3. 판독표: `python3 {SKILL_DIR}/scripts/sentence_sheet.py {FILE}` 실행 결과
 4. 대상 문서 `{FILE}`
