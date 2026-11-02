@@ -4,3 +4,6 @@
 !.claude-plugin/
 !.claude-plugin/**
 __pycache__/
+
+# eval run 산출물(스킬 스냅숏, run 로그, 교정 결과). 실행기와 채점기는 evals/harness/ 에서 추적
+evals/workspace/

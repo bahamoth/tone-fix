@@ -165,4 +165,5 @@ git clone https://github.com/bahamoth/tone-fix ~/.agents/skills/tone-fix
 - [`references/review-prompt.md`](references/review-prompt.md): 독립 판독 서브에이전트 지시문
 - [`scripts/`](scripts/): `check_lexical.py`, `check_md_layout.py`, `check_br.py`, `sentence_sheet.py`
 - [`evals/evals.json`](evals/evals.json): eval 8건 (HTML 카드 3건, MD 보고서 1건, MD intent 문서 1건, MD 문맥 판독 1건, MD 긴 문서 2건)
+- [`evals/harness/`](evals/harness/): eval 실행기와 채점기. run 산출물은 `evals/workspace/` 에 쌓이고 git 에서 제외된다
 - [`CHANGELOG.md`](CHANGELOG.md): 버전별 변경 이력
