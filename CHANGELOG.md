@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/bahamoth/tone-fix/compare/v1.4.1...v1.5.0) (2026-11-23)
+
+
+### Features
+
+* ban metaphorical '축' (두 축, 속도 축) as §8.17 with deterministic detection ([f2d812c](https://github.com/bahamoth/tone-fix/commit/f2d812cdcb7f8e4887bee637a3ade4dbce9a40f0))
+* scope rules by evidence, extend §8.16 to category names, read a project glossary from .tone-fix/glossary.md ([8cddd65](https://github.com/bahamoth/tone-fix/commit/8cddd657f0230b2e7dffe3d49f164ffda9e5eb59))
+
 ## [1.4.1](https://github.com/bahamoth/tone-fix/compare/v1.4.0...v1.4.1) (2026-10-16)
 
 
