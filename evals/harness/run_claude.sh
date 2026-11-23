@@ -26,6 +26,8 @@ if repo in prompt:
 print(prompt, end='')
 PY
 PROMPT="$(cat "$PF")"; rm -f "$PF"
+# eval 디렉터리(run_dir 의 두 단계 위)에 project/ 가 있으면 작업 디렉터리 루트에 깐다(예: project/.tone-fix/glossary.md)
+EV="$(dirname "$(dirname "$RUN")")"; [ -d "$EV/project" ] && cp -R "$EV/project/." "$TMP/"
 cd "$TMP"
 env -u CLAUDECODE claude -p "$PROMPT" \
   --output-format stream-json --verbose \

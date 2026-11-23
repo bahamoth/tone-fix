@@ -13,9 +13,21 @@ run 산출물은 `evals/workspace/` 에 쌓이고 git 에서 제외된다.
 | `grade_ctx.py` | 문맥 판독 eval 채점 (id 5, push-timing) | run 디렉터리 |
 | `grade_tut.py` | 심은 표현 잔존과 수치 보존 집계 (id 7, tutorial-revamp) | 교정된 MD 파일 |
 | `judge-prompt.md` | 블라인드 판정자 지시문 (id 6, roas-forecast) | 없음 |
+| `check_controls.py` | 사람 글 대조군(`evals/controls/`)에서 `check_lexical.py` 히트가 기준선보다 늘었는지 점검 | 없음 (`--update` 로 기준선 갱신) |
+| `review_ab.py` | 두 스킬의 교정본을 채점하고 원문과 줄 단위로 맞춘 대조 화면(`review.html`)을 만든다 | iteration 디렉터리 |
 
 채점기는 저장소의 `scripts/` 를 그대로 호출한다.
 규칙을 바꾼 뒤 다시 채점하면 새 규칙이 반영된다.
+
+## eval 의 성격
+
+`evals/files/` 의 픽스처는 회귀 시험이다.
+픽스처에 심은 표현이 이미 규칙과 검출기에 들어가 있어, 통과해도 새 문서에서 잘 고친다는 뜻은 아니다.
+
+규칙에 반영되지 않은 글로 보는 시험:
+
+- **사람 글 대조군**(`evals/controls/`): 규칙이 사람이 쓴 보고서를 위반으로 잡지 않는지 본다. `python3 evals/harness/check_controls.py` 가 `failures: 0` 이어야 한다. 규칙이나 정규식을 고칠 때마다 돌린다.
+- **전문가 교정 쌍**: 국립국어원 「한눈에 알아보는 공공언어 바로 쓰기」의 교정 사례는 이용 조건(공공누리 제4유형)에 따라 저장소에 넣지 않았다. `evals/workspace/control/nikl/` 에 두고 쓴다.
 
 ## 실행 순서
 
@@ -57,11 +69,32 @@ run 산출물은 `evals/workspace/` 에 쌓이고 git 에서 제외된다.
    python3 evals/harness/grade.py evals/workspace/iteration-N/eval-K-이름/with_skill/run-1
    ```
 
+## A/B 대조 화면
+
+`review_ab.py` 는 iteration 디렉터리의 eval 마다 원문, 기존 스킬(`old_skill`) 교정본, 새 스킬(`with_skill`) 교정본을 읽는다.
+
+```bash
+python3 evals/harness/review_ab.py evals/workspace/iteration-N
+open evals/workspace/iteration-N/review.html
+```
+
+- `eval_metadata.json` 에 `file`(대상 파일 이름)과 `kind`(문서 종류)가 있어야 한다.
+- eval 디렉터리에 `reference/<파일>` 을 두면 사람이 승인한 교정본을 열 하나로 함께 보여 준다.
+- 수치는 `grading.json` 에 남는다. 스캐너 위반, 레이아웃 위반, 수치 누락, 분량 변화, 바뀐 줄 수를 두 스킬에 같은 잣대로 잰다.
+- 화면의 줄별 판정 버튼은 브라우저에만 저장된다. `내 판정 복사` 로 JSON 을 꺼낸다.
+- eval 디렉터리에 `judge.json`(`overall`, `summary`, `count`, `items`, `info_loss`)을 두면 블라인드 판정을 참고 항목으로 함께 보여 준다.
+- 화면의 줄별 판정은 브라우저에만 저장된다. '내 판정 복사' 로 받은 목록을 iteration 디렉터리의 `votes.json` 으로 저장하면 요약 표의 사람 판정 열에 실리고, 판정이 비어 있는 브라우저에서도 같은 판정이 채워진다.
+
+HTML 은 화면에 보이는 글만, JSON 은 문자열 값만 대조한다.
+
 ## run 격리
 
 `run_claude.sh` 는 `prompt.txt` 에 적힌 워크스페이스 경로를 저장소 밖 임시 디렉터리에 복사하고, 경로를 바꿔 그 안에서 실행한다.
 끝나면 outputs 만 워크스페이스로 되가져오고 임시 디렉터리를 지운다.
 그래서 run 세션은 저장소의 git 상태, evals.json 의 기대 결과, 최신 규칙을 볼 수 없다.
+
+eval 디렉터리에 `project/` 가 있으면 그 내용을 run 의 작업 디렉터리 루트에 복사한다.
+용어집을 적용한 run 을 보려면 `project/.tone-fix/glossary.md` 를 둔다. `prompt.txt` 에는 용어집을 적지 않는다.
 
 `prompt.txt` 에 워크스페이스 밖 저장소 경로가 남아 있으면 실행하지 않는다.
 `evals/workspace/` 는 git 에서 제외되므로 `git clean -fdx` 를 실행하면 함께 지워진다.
